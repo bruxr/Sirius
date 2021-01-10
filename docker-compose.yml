@@ -8,3 +8,7 @@ services:
       - .:/code
     environment:
       FLASK_ENV: development
+  couchdb:
+    image: "couchdb:3"
+    volumes:
+      - ./db/couchdb-data:/opt/couchdb/data
