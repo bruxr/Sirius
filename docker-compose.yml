@@ -9,7 +9,7 @@ services:
     environment:
       FLASK_ENV: development
   couchdb:
-    image: "matthiasg/couchdb:2.1.1"
+    image: "couchdb:3"
     volumes:
       - ./db/couchdb-data:/opt/couchdb/data
     environment:
