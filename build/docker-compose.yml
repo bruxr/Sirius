@@ -1,5 +1,4 @@
 version: "3.9"
-restart: unless-stopped
 services:
   web:
     build: ../
