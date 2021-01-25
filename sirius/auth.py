@@ -16,6 +16,6 @@ def login():
     session.clear()
     session['couch_username'] = username
     session['couch_password'] = password
-    return redirect(url_for('index'))
+    return redirect(url_for('admin.index'))
   
   return render_template('auth/login.html')

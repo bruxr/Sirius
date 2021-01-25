@@ -1,5 +1,6 @@
 import os
 from . import auth
+from . import admin
 from flask import Flask
 
 app = Flask(__name__, instance_relative_config=True)
@@ -12,3 +13,4 @@ except OSError:
   pass
 
 app.register_blueprint(auth.bp)
+app.register_blueprint(admin.bp)
