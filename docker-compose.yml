@@ -7,6 +7,7 @@ services:
     volumes:
       - .:/code
     environment:
+      FLASK_APP: sirius
       FLASK_ENV: development
   couchdb:
     image: "couchdb:3"
