@@ -10,3 +10,7 @@ def check_logged_in_user():
 @bp.route('/')
 def index():
   return render_template('admin/index.html')
+
+@bp.route('/db')
+def db():
+  return render_template('admin/db.html')
