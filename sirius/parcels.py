@@ -57,8 +57,13 @@ def get_gogoxpress_parcel(code):
     headers = { 'Accept': 'application/json' }
     res = requests.get(headers=headers, url=url)
 
+    if res.status_code == 400:
+        raise RuntimeError('GoGo Xpress parcel does not exist')
+
+    if not res.ok:
+        raise RuntimeError('GoGo Xpress API error')
+
     data = res.json()
-    pprint(data)
     result = {}
     result['start'] = parse(data['data']['attributes']['created_at'])
     result['end'] = result['start'] + timedelta(days=16)
