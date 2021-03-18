@@ -1,5 +1,6 @@
 import requests
-from datetime import datetime
+from pprint import pprint
+from datetime import datetime, timedelta
 from dateutil.parser import parse
 from bs4 import BeautifulSoup
 
@@ -46,6 +47,31 @@ def get_jinio_parcel(code):
         result['tracking'].append({
             'date': date,
             'message': info_text,
+        })
+
+    return result
+
+def get_gogoxpress_parcel(code):
+    """Retrieve details about a parcel carried by GoGo Xpress"""
+    url = f'https://api.gogoxpress.com/v1/track/{code}'
+    headers = { 'Accept': 'application/json' }
+    res = requests.get(headers=headers, url=url)
+
+    data = res.json()
+    pprint(data)
+    result = {}
+    result['start'] = parse(data['data']['attributes']['created_at'])
+    result['end'] = result['start'] + timedelta(days=16)
+
+    result['tracking'] = []
+    for event in data['data']['attributes']['events']:
+        message = event['status_name']
+        if (event['remarks']):
+            message = message + ': ' + event['remarks'].replace(':', ', ')
+
+        result['tracking'].append({
+            'date': parse(event['status_updated_at']),
+            'message': message,
         })
 
     return result
