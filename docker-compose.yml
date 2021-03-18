@@ -18,3 +18,7 @@ services:
       - COUCHDB_PASSWORD=secret
     ports:
       - "5984:5984"
+  rabbitmq:
+    image: "rabbitmq:3-alpine"
+    ports:
+      - "5672:5672"
