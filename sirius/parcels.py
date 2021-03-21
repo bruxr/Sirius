@@ -47,7 +47,7 @@ def get_jinio_parcel(code):
         info_text = ": ".join(str(node).split("<br/>")[1:])
         info_text = info_text.replace("</li>", "")
         result["tracking"].append({
-            "date": date,
+            "timestamp": date,
             "message": info_text,
         })
 
@@ -78,7 +78,7 @@ def get_gogoxpress_parcel(code):
             message = message + ": " + event["remarks"].replace(":", ", ")
 
         result["tracking"].append({
-            "date": parse(event["status_updated_at"]),
+            "timestamp": parse(event["status_updated_at"]),
             "message": message,
         })
     result["tracking"] = list(reversed(result["tracking"]))
