@@ -1,4 +1,5 @@
 from celery import Celery
+from celery.schedules import crontab
 from pprint import pprint
 
 from .db import get_db
@@ -6,6 +7,30 @@ from .parcels import get_jinio_parcel, get_gogoxpress_parcel
 
 
 app = Celery('tasks', broker='pyamqp://guest@localhost//')
+
+
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    sender.add_periodic_task(
+        crontab(minute=0, hour=0),
+        update_parcels.s(),
+    )
+
+
+@app.task
+def update_parcels():
+    db = get_db()
+    parcels = db.find({
+        "selector": {
+            "kind": "PARCEL",
+            "delivered": {"$exists": False},
+        },
+        "fields": ["_id"],
+    })
+    parcels = list(parcels)
+
+    for doc in parcels:
+        update_parcel_status.delay(doc["_id"])
 
 
 def serialize_tracking(item):
@@ -16,7 +41,7 @@ def serialize_tracking(item):
 
 
 @app.task
-def get_parcel_status(id):
+def update_parcel_status(id):
     db = get_db()
     doc = db.get(id)
 
