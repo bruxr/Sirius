@@ -81,5 +81,6 @@ def get_gogoxpress_parcel(code):
             "date": parse(event["status_updated_at"]),
             "message": message,
         })
+    result["tracking"] = list(reversed(result["tracking"]))
 
     return result
